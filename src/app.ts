@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Routes
-import checkBarcode from './src/routes/checkBarcodeRoute';
+import checkBarcode from './routes/checkBarcodeRoute';
 
 const app = express();
 
