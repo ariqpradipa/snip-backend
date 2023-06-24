@@ -19,17 +19,12 @@ Barcode.init(
             allowNull: false,
             unique: true,
         },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        }
     },
     {
         sequelize,
         modelName: 'Barcode',
         tableName: 'barcode_data',
-        timestamps: true,
+        timestamps: false,
     }
 );
 

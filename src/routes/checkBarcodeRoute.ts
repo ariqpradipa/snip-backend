@@ -4,6 +4,6 @@ import { checkBarcode } from '../controllers/checkBarcodeController';
 
 const router = express.Router();
 
-router.post('/check', checkBarcode)
+router.post('/check/', checkBarcode)
 
 export default router;

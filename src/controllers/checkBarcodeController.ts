@@ -11,7 +11,7 @@ export const checkBarcode = async (req: Request, res: Response) => {
         const barcodeExist = await Barcode.findOne({ where: { barcode } });
 
         if (barcodeExist) {
-            return res.status(409).send({
+            return res.status(200).send({
                 success: false,
                 message: "Barcode already used",
             });
