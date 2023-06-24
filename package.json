@@ -8,9 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node index.ts",
-    "dev": "nodemon index.ts",
-    "vercel-build": "echo hello",
-    "typecheck": "tsc --noEmit"
+    "dev": "nodemon index.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
