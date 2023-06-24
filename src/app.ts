@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Routes
-import checkBarcode from './src/routes/checkBarcodeRoute';
+import checkBarcode from './routes/checkBarcodeRoute';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +17,3 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/barcode', checkBarcode);
 
 export default app;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
