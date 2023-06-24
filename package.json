@@ -2,7 +2,7 @@
   "name": "snip-backend",
   "version": "1.0.0",
   "description": "Backend for snip app",
-  "main": "src/index.ts",
+  "main": "index.ts",
   "repository": "https://github.com/ariqpradipa/snip-backend",
   "author": "Ariq Pradipa Santoso <ariq.pradipa@outlook.com>",
   "license": "MIT",
