@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/barcode', checkBarcode);
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+export default app;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+// });
