@@ -7,8 +7,8 @@
   "author": "Ariq Pradipa Santoso <ariq.pradipa@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "dev": "nodemon src/index.ts",
+    "start": "ts-node index.ts",
+    "dev": "nodemon index.ts",
     "vercel-build": "echo hello",
     "typecheck": "tsc --noEmit"
   },
