@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import { checkToken } from '../middlewares/checkToken';
-import { userManage } from '../controllers/userManage';
+import { verifyAccessToken } from '../middlewares/verifyAccessToken';
+import { login, userManage } from '../controllers/authController';
 
 export default async function routes(fastify: FastifyInstance): Promise<void> {
 
-    fastify.get('/user', { preHandler: checkToken }, userManage);
+    fastify.get('/auth/login', { preHandler: verifyAccessToken }, login);
 
     // // GET /user
     // fastify.get('/user', async (request: FastifyRequest, reply: FastifyReply) => {

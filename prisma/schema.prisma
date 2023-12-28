@@ -30,8 +30,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // or "mysql", "sqlite", "sqlserver" etc.
-  url      = env("DATABASE_URL")
+  provider  = "postgresql" // or "mysql", "sqlite", "sqlserver" etc.
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum UserProvider {
@@ -80,13 +81,14 @@ enum AuditTrailActionType {
 
 model User {
   id            String             @id
-  username      String             @unique
+  username      String?            @unique
+  email         String             @unique
   nickname      String
   name          String
   avatar        String
-  provider      UserProvider
+  provider      UserProvider?
   createdAt     DateTime           @default(now())
-  lastLogin     DateTime
+  lastLogin     DateTime           @default(now())
   organizations OrganizationUser[]
   auditTrails   AuditTrail[]
 }
