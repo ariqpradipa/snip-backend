@@ -66,6 +66,14 @@ export async function login(request: any, reply: FastifyReply) {
 
         const token = fastify.jwt.sign(userToken);
 
+        // Set a cookie with the token
+        reply.setCookie('snip_token', "Bearer " + token, {
+            path: '/',
+            httpOnly: true, // Recommended for security purposes
+            secure: process.env.NODE_ENV === 'production', // Secure flag in production
+            maxAge: 7 * 24 * 60 * 60 // Expires in 1 day
+        });
+
         return reply.code(200).send({ token });
 
     } catch (error: any) {

@@ -6,6 +6,7 @@
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
+    "@fastify/cookie": "^9.2.0",
     "@fastify/env": "^4.3.0",
     "@fastify/jwt": "^7.2.4",
     "@prisma/client": "5.7.1",
