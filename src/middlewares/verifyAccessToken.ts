@@ -1,7 +1,12 @@
 import { FastifyReply } from 'fastify';
 
 export async function verifyAccessToken(request: any, reply: FastifyReply) {
-    const authHeader = request.headers.authorization || "";
+    const authHeader = request.headers.authorization;
+
+    if (!authHeader) {
+        reply.code(401).send({ message: 'Missing authorization header' });
+        return; // Stop processing the request
+    }
 
     try {
         const res = await fetch(`${process.env.AUTH0_ENDPOINT}/userinfo`, {
