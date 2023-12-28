@@ -1,32 +1,25 @@
 import { FastifyInstance } from 'fastify';
 import { verifyAccessToken } from '../middlewares/verifyAccessToken';
-import { login, userManage } from '../controllers/authController';
+import { verifyToken } from '../middlewares/verifyToken';
+import { login } from '../controllers/authController';
+
+import { createOrganization, updateOrganization, deleteOrganization } from '../controllers/organizationController';
+import { inviteUser, acceptInvitation, declineInviation, changeUserRole, deleteUser } from '../controllers/organizationUserController';
 
 export default async function routes(fastify: FastifyInstance): Promise<void> {
 
+    // authentication
     fastify.get('/auth/login', { preHandler: verifyAccessToken }, login);
 
-    // // GET /user
-    // fastify.get('/user', async (request: FastifyRequest, reply: FastifyReply) => {
-    //     // Your logic for /user
-    //     return { user: 'User data' };
-    // });
+    // organizations handler
+    fastify.post('/organization/create', { preHandler: verifyToken }, createOrganization)
+    fastify.post('/organization/update', { preHandler: verifyToken }, updateOrganization)
+    fastify.delete('/organization/delete', { preHandler: verifyToken }, deleteOrganization)
 
-    // // GET /items
-    // fastify.get('/items', async (request: FastifyRequest, reply: FastifyReply) => {
-    //     // Your logic for /items
-    //     return { items: 'List of items' };
-    // });
-
-    // // POST /signin
-    // fastify.post('/signin', async (request: FastifyRequest, reply: FastifyReply) => {
-    //     // Your logic for /signin
-    //     return { status: 'Signed in' };
-    // });
-
-    // // POST /login
-    // fastify.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
-    //     // Your logic for /login
-    //     return { status: 'Logged in' };
-    // });
+    // organizationUser handler
+    fastify.post('/organizationUser/invite', { preHandler: verifyToken }, inviteUser)
+    fastify.post('/organizationUser/accept', { preHandler: verifyToken }, acceptInvitation)
+    fastify.post('/organizationUser/decline', { preHandler: verifyToken }, declineInviation)
+    fastify.post('/organizationUser/changeRole', { preHandler: verifyToken }, changeUserRole)
+    fastify.delete('/organizationUser/delete', { preHandler: verifyToken }, deleteUser)
 }

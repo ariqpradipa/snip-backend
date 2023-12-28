@@ -73,27 +73,3 @@ export async function login(request: any, reply: FastifyReply) {
         return reply.code(500).send({ message: 'Internal Server Error', error: error.message });
     }
 }
-
-export async function userManage(request: any, reply: FastifyReply) {
-    // const fastify = request.server;
-
-    // // Now you can use Prisma
-    // const users = await fastify.prisma.user.findMany();
-    const user = request.user;
-    console.log(user)
-    console.log("inside userManage");
-    console.log(process.env.AUTH0_ENDPOINT);
-
-    // Return the fetched data
-    return { message: user };
-    // Logic for handling /user route
-    // You can access request and reply objects here
-}
-
-
-export async function items(request: any, reply: FastifyReply) {
-    const fastifyInstance = request.server;
-    // Logic for handling /items route
-    // You can access request and reply objects here
-    return { items: 'List of items' };
-}  
