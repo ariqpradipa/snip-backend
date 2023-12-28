@@ -8,8 +8,8 @@ import { FastifyReply } from 'fastify';
  * @returns A promise that resolves to the reply object with the appropriate response.
  */
 export async function login(request: any, reply: FastifyReply) {
-    const user = request.user;
     const fastify = request.server;
+    const user = request.user;
 
     // Check if user is present in the request
     if (!user) {
