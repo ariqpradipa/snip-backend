@@ -94,16 +94,17 @@ model User {
 }
 
 model Organization {
-  id          String             @id @default(uuid())
-  name        String
-  description String
-  contact     String
-  avatar      String
-  banner      String
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  users       OrganizationUser[]
-  events      Event[]
+  id               String             @id @default(uuid())
+  organizationCode String             @unique @db.VarChar(20)
+  name             String
+  description      String
+  contact          String
+  avatar           String
+  banner           String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  users            OrganizationUser[]
+  events           Event[]
 }
 
 model OrganizationUser {
