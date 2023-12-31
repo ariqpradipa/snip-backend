@@ -4,7 +4,6 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "dev": "ts-node src/index.ts",
     "vercel": "vercel dev",
     "build": "tsc -p tsconfig.json",
     "postinstall": "prisma generate"

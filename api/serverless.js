@@ -24,9 +24,11 @@ app.register(fastifyJWT, {
     }
 });
 app.register(fastifyCookie); // Register cookie plugin (after loading env
-app.register(routes); // Register routes
+app.register(routes, {
+    prefix: "/",
+}); // Register routes
 
 export default async (req, res) => {
     await app.ready();
-    app.server.emit('request', req, res);
-}
+    app.server.emit("request", req, res);
+};
