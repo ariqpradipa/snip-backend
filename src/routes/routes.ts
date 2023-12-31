@@ -6,7 +6,12 @@ import { login } from '../controllers/authController';
 import { createOrganization, updateOrganization, deleteOrganization } from '../controllers/organizationController';
 import { inviteUser, acceptInvitation, declineInviation, changeUserRole, deleteUser } from '../controllers/organizationUserController';
 
-export default async function routes(fastify: FastifyInstance): Promise<void> {
+export default async function routes(fastify: FastifyInstance, options: any): Promise<void> {
+
+    // on / route, return a message
+    fastify.get('/', async (request, reply) => {
+        return { hello: 'world' }
+    })
 
     // authentication
     fastify.get('/auth/login', { preHandler: verifyAccessToken }, login);
