@@ -47,6 +47,11 @@ async function initialize() {
     app.register(fastifyCookie); // Register cookie plugin (after loading env
     app.register(routes); // Register routes
 
+    // on / route, return a message
+    app.get('/', async (request, reply) => {
+      return { hello: 'world' }
+    })
+
     await app.ready();
 
     app.listen({ port: Number(process.env.PORT) }, (err) => {

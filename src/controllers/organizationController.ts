@@ -1,42 +1,5 @@
 import { FastifyReply } from 'fastify';
 
-export async function getOrganizationById(request: any, reply: FastifyReply) {
-    const fastify = request.server;
-
-    const { id } = request.body;
-
-    const organization = await fastify.prisma.organization.findUnique({
-        where: {
-            id,
-        },
-    });
-
-    if (!organization) {
-        return reply.code(404).send({ error: 'Organization not found' });
-    }
-
-    return reply.code(200).send(organization);
-}
-
-export async function getAllOrganizations(request: any, reply: FastifyReply) {
-    const fastify = request.server;
-    const user = request.user;
-
-    const userOrganizations = await fastify.prisma.organizationUser.findMany({
-        where: {
-            userId: user.id,
-        },
-        include: {
-            organization: true, // Include the organization details
-        },
-    });
-
-    // Extract just the organization details from the query result
-    const organizations = userOrganizations.map((orgUser: any) => orgUser.organization);
-
-    return reply.code(200).send(organizations);
-}
-
 export async function createOrganization(request: any, reply: FastifyReply) {
     const fastify = request.server;
 
@@ -68,7 +31,7 @@ export async function updateOrganization(request: any, reply: FastifyReply) {
 
     const { id, organizationCode, name, description, contact } = request.body;
 
-    if (!await validateUserOrganizationRole(fastify, request.user.id, id)) {
+    if (!await validateUserOrganizationAdmin(fastify, request.user.id, id)) {
         return reply.code(403).send({ error: 'User is not an admin of this organization' });
     }
 
@@ -96,7 +59,7 @@ export async function deleteOrganization(request: any, reply: FastifyReply) {
 
     const { id, organizationCode } = request.body;
 
-    if (!await validateUserOrganizationRole(fastify, request.user.id, id)) {
+    if (!await validateUserOrganizationAdmin(fastify, request.user.id, id)) {
         return reply.code(403).send({ error: 'User is not an admin of this organization' });
     }
 
@@ -114,8 +77,73 @@ export async function deleteOrganization(request: any, reply: FastifyReply) {
     return reply.code(200).send(organization);
 }
 
+export async function getOrganizationById(request: any, reply: FastifyReply) {
+    const fastify = request.server;
+    const user = request.user;
+
+    const id = request.query.id;
+
+    if (!await validateUserOrganization(fastify, user.id, id)) {
+        return reply.code(403).send({ error: 'User is not a member of this organization' });
+    }
+
+    const organization = await fastify.prisma.organization.findUnique({
+        where: {
+            id,
+        },
+    });
+
+    if (!organization) {
+        return reply.code(404).send({ error: 'Organization not found' });
+    }
+
+    return reply.code(200).send(organization);
+}
+
+export async function getAllOrganizations(request: any, reply: FastifyReply) {
+    const fastify = request.server;
+    const user = request.user;
+
+    // Pagination parameters
+    const page = parseInt(request.query.page) || 1;
+    const limit = parseInt(request.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // Query with pagination
+    const userOrganizations = await fastify.prisma.organizationUser.findMany({
+        where: {
+            userId: user.id,
+        },
+        skip: offset,
+        take: limit,
+        include: {
+            organization: true,
+        },
+    });
+
+    // Optional: Get total count for pagination info
+    const totalCount = await fastify.prisma.organizationUser.count({
+        where: { userId: user.id },
+    });
+
+    // Extract organization details
+    const organizations = userOrganizations.map((orgUser: any) => orgUser.organization);
+
+    // Include pagination info in the response
+    return reply.code(200).send({
+        data: organizations,
+        pagination: {
+            total: totalCount,
+            currentPage: page,
+            pageSize: limit,
+            totalPages: Math.ceil(totalCount / limit),
+        },
+    });
+}
+
+
 // Utility to check if user is part of an organization and is an admin
-async function validateUserOrganizationRole(fastify: any, userId: string, organizationId: string): Promise<boolean> {
+async function validateUserOrganizationAdmin(fastify: any, userId: string, organizationId: string): Promise<boolean> {
     const organizationUser = await fastify.prisma.organizationUser.findFirst({
         where: {
             userId,
@@ -124,4 +152,16 @@ async function validateUserOrganizationRole(fastify: any, userId: string, organi
     });
 
     return organizationUser && organizationUser.role === 'admin';
+}
+
+async function validateUserOrganization(fastify: any, userId: string, organizationId: string): Promise<boolean> {
+
+    const organizationUser = await fastify.prisma.organizationUser.findFirst({
+        where: {
+            userId,
+            organizationId,
+        },
+    });
+
+    return !!organizationUser;
 }
