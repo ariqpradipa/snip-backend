@@ -5,8 +5,9 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node src/index.ts",
-    "postinstall": "prisma generate",
-    "vercel-build": "echo 'vercel-build'"
+    "vercel": "vercel dev",
+    "build": "tsc -p tsconfig.json",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@fastify/cookie": "^9.2.0",
